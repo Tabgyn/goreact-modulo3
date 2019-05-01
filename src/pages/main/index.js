@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 
-import * as FavoriteActions from '../../store/actions/favorites';
+import { Creators as FavoriteActions } from '../../store/ducks/favorites';
 
 class Main extends Component {
   state = {
@@ -37,6 +37,8 @@ class Main extends Component {
           <button type="submit">Add</button>
 
           {favorites.loading && <span>Carregando...</span>}
+
+          {!!favorites.error && <span>{favorites.error}</span>}
         </form>
 
         <ul>
@@ -58,6 +60,7 @@ Main.propTypes = {
   addFavoriteRequest: PropTypes.func.isRequired,
   favorites: PropTypes.shape({
     loading: PropTypes.bool,
+    error: PropTypes.oneOfType([null, PropTypes.string]),
     data: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,
