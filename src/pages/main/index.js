@@ -13,8 +13,12 @@ class Main extends Component {
   handleAddRepository = (e) => {
     e.preventDefault();
 
-    const { addFavorite } = this.props;
-    addFavorite();
+    const { repositoryInput } = this.state;
+    const { addFavoriteRequest } = this.props;
+
+    addFavoriteRequest(repositoryInput);
+
+    this.setState({ repositoryInput: '' });
   };
 
   render() {
@@ -25,15 +29,18 @@ class Main extends Component {
       <Fragment>
         <form onSubmit={this.handleAddRepository}>
           <input
+            type="text"
             placeholder="usuário/repositório"
             value={repositoryInput}
             onChange={e => this.setState({ repositoryInput: e.target.value })}
           />
           <button type="submit">Add</button>
+
+          {favorites.loading && <span>Carregando...</span>}
         </form>
 
         <ul>
-          {favorites.map(favorite => (
+          {favorites.data.map(favorite => (
             <li key={favorite.id}>
               <p>
                 <strong>{favorite.name}</strong> ({favorite.description})
@@ -48,15 +55,18 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  addFavorite: PropTypes.func.isRequired,
-  favorites: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      description: PropTypes.string,
-      url: PropTypes.string,
-    }),
-  ).isRequired,
+  addFavoriteRequest: PropTypes.func.isRequired,
+  favorites: PropTypes.shape({
+    loading: PropTypes.bool,
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        description: PropTypes.string,
+        url: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({
