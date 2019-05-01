@@ -5,11 +5,16 @@ import { connect } from 'react-redux';
 
 import * as TodoActions from './store/actions/todos';
 
-const TodoList = ({ todos, addTodo }) => (
+const TodoList = ({ todos, addTodo, removeTodo }) => (
   <Fragment>
     <ul>
       {todos.map(todo => (
-        <li key={todo.id}>{todo.text}</li>
+        <li key={todo.id}>
+          {todo.text}
+          <button type="button" onClick={() => removeTodo(todo.id)}>
+            Remove
+          </button>
+        </li>
       ))}
     </ul>
     <button type="button" onClick={() => addTodo('Entrar na comunidade da Rocketseat')}>
@@ -26,6 +31,7 @@ TodoList.propTypes = {
     }),
   ).isRequired,
   addTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
